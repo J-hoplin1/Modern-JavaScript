@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+    /*
+
+    이벤트 처리기를 등록하는 방법에 대해 알아보자
+
+    브라우저에서 동작하는 프로그램은 기본적으로 이벤트 주도 프로그램(Event Driven Program)이다
+    이벤트란 사용자가 버튼을 클릭하는 등 단말기와 애플리케이션이 처리할 수 있는 동작이나 사건을 의밓나다.
+
+    이벤트가 발생할 때까지 기다렸다가 이벤트가 발생했을때 미리 등록한 작업을 수행하는 프로그램이 이벤트 주도형 프로그램이다.
+
+    이벤트 처리기란? 이벤트가 발생할때 실행되는 함수이다.
+    
+    함수를 이벤트가 발생했을때 동작할 이벤트 처리기로 설정하는 행위를 가리켜 함수를 이벤트의 이벤트 처리기로 등록한다고 한다.
+
+    */
+    function displayTime(){
+        let d = new Date;
+        console.log(`현재 시간은 ${d.getFullYear()}년 ${d.getMonth()}월 ${d.getDate()}일 ${d.getHours()}시 ${d.getMinutes()}분 입니다`);
+    }
+    </script>
+</head>
+<body>
+    <input type="button" value="click here" onclick="displayTime()">
+</body>
+</html>
