@@ -1,78 +1,93 @@
+/** 
+예제를 변형해보자 No.1
+Custom 내용
+- clear버튼
+- lap 버튼
+TODOS
+- 시 / 분 / 초 / millisecond 로 표현하게끔
+*/
+
+
 window.onload = function() {
     
-    let startButton = document.getElementById("start");
-    let stopButton = document.getElementById("stop");
-    let displayTime = document.getElementById("display");
-    let clearButton = document.getElementById("clear");
-    let lapButton = document.getElementById("lap");
-    clearButton.onclick = clear;
-    //시작 시간
-    let startTime;
-    // 타이머의 본체
+    // Element tag
+    let display = document.getElementById("display");
+    let startbtn = document.getElementById("start");
+    let stopbtn = document.getElementById("stop");
+    let clearbtn = document.getElementById("clear");
+    let lapbtn = document.getElementById("lap");
+
+
+    // Essential Variable
+
+    // start btn event handler
+    startbtn.onclick = start;
+    // timer variable
     let timer;
 
-    startButton.onclick = start;
-    // 측정하다 stop하면 saveTime에 지금까지 측정된 시간을 저장한다.
-    // 동일하게 소수점 2째 자리까지 표시되도록 통일한다. 그렇지 않은 경우 html 애니메이션이 부자연스러워지는 경우가 발생한다.
-    let savedTime = parseFloat(Number(0)).toFixed(2); 
-    //현재 측정되고 있는 시간데이터, undefined로 초기화
-    let timeData;
-    //lap counter
+    // start Period Date object
+    let startPeriod;
+    // estimate date object per 0.01 second
+    let estimation;
+    // saved time after stop
+    let savedTime = parseFloat(Number(0)).toFixed(2);
+    // save real time data while estimating
+    let realTime;
+    // lap number
     let lapCount = 1;
 
+    // pre lap time data
+    let lastLapTime;
 
+    // Event Handler functions
     function start(){
-        console.log(savedTime);
-        startButton.onclick = null; // start
-        stopButton.onclick = stop; // start시에 start버튼 이벤트 처리기를 비활성화 하고,  stop버튼을 활성화 시킨다.
-        clearButton.onclick = null; // de activate clarbutton while running
-        lapButton.onclick = lap; // activate lap button while running
-        //시작시점의 Date()
-        startTime = new Date();
-        startButton.value = "start";
-        timer = setInterval(
-            (() => {
-                // 0.01초마다 그때그때의 Date()생성
-                let now = new Date();
-                /*
-                커스텀 해보기
+        startbtn.value = "start";
+        // Activation / Deactivation of btn
+        startbtn.onclick = null; // Deactivate
+        stopbtn.onclick = stop;
+        clearbtn.onclick = null; // Deactivate
+        lapbtn.onclick = lap;
 
-                - stop을 누른 후에 다시 start를 누르면 기존 측정시간에서 이어서 측정되게끔
-                
-                - clear을 누르면 초기화된다.
-
-                    - clear버튼은 stop() 이벤트가 활성화 되었을때만 실행할 수 있도록 한다.
-
-                    - clear시에는 모든 데이터를 완전히 초기화 해야한다.
-
-                - lap을 누르면 console에 lap을 출력하도록
-                */
-                displayTime.innerHTML = timeData = parseFloat((((now - startTime) / 1000) + savedTime)).toFixed(2);
-        }),10); // 0.01초 마다 HTML요소의 innerHTML프로퍼티로 기록한다.
+        // start period date object
+        startPeriod = new Date();
+        timer = setInterval((() => {
+            // get date object every 0.01 second
+            estimation = new Date();
+            display.innerHTML = realTime = (parseFloat(((estimation - startPeriod) / 1000)) + parseFloat(savedTime)).toFixed(2);
+        }), 10);
     }
 
-    // for stop event handler
     function stop(){
-        // stop시에 start버튼value를 continue로 변경
-        startButton.value = "continue";
-        startButton.onclick = start;
+        // stop timer
         clearInterval(timer);
-        savedTime = timeData;
+        // saved latest realtime estimate data
+        savedTime = realTime;
+
+        // activat / deactivat button + change HTML Element value
+        startbtn.value = "continue";
+        startbtn.onclick = start;
+        stopbtn.onclick = null; // Deactivate
+        clearbtn.onclick = clear;
+        lapbtn.onclick = null; // Deactivate
     }
 
-    // for clear event handler
+    // clear이벤트는 stop이벤트의 종속 이벤트이므로 버튼 활성/비활성에 대한 개입을 하지 않아도 된다.
     function clear(){
-        // clear시에 start버튼 value start로 변경
-        startButton.value = "start";
         savedTime = parseFloat(Number(0)).toFixed(2);
         lapCount = 1;
-        timeData = undefined; // init as undefined variable
-        displayTime.innerHTML = "0.00"; // 화면상에도 0.00초로 초기화한다.
+        display.innerHTML = "0.00";
     }
-
-    // for lap event handler
+    
     function lap(){
-        console.log(`Lap No.${lapCount} : ${timeData}`);
-        lapCount ++;
+        if(lapCount === 1){
+            console.log(`Lap No.${lapCount} : ${realTime}`);
+            lastLapTime = realTime;
+            lapCount++;
+        }
+        else{
+            console.log(`Lap No.${lapCount} : ${realTime}\nGap between Lap No.${lapCount - 1} : ${(parseFloat(realTime) - parseFloat(lastLapTime)).toFixed(2)}`);
+            lastLapTime = realTime;
+            lapCount++;
+        }
     }
 };
