@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+    <script>
+        window.onload = () => {
+            let btn = document.getElementById("btn");
+            btn.onclick = () => {
+                let height = parseFloat(document.getElementById("height").value);
+                let weight = parseFloat(document.getElementById("weight").value);
+                let bmi = document.getElementById("bmi");
+                bmi.innerHTML = (weight / height / height).toFixed(1);
+            };
+        };
+    </script>
+</head>
+<body>
+    <div id="layout1">
+        <p>키 : <input type="number" id="height"> m</p>
+        <p>몸무게 : <input type="number" id="weight"> kg</p>
+        <p>당신의 체질량수는 <output id="bmi">??</output>입니다</p>
+        <input type="button" id="btn" value="계산">
+    </div>
+</body>
+</html>
